@@ -52,7 +52,7 @@ if __name__ == '__main__':
     while game.get_game_result() == 0:
         if game.cur_player == cur_nnet_player:
             if moves_count < 8:
-                acts, act_probs = mcts1.play(game, 1)
+                acts, act_probs = mcts1.play(game, 0.1)
             else:
                 acts, act_probs = mcts1.play(game, temperature)
             action = int(np.random.choice(acts, p=act_probs))
