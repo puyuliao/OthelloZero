@@ -39,7 +39,7 @@ class Arena():
     def run(self, n_games=20, n_playout=800, c_puct=5, temperature=0.001, show=True):
         mcts1 = MCTS(self.nnet1, n_playout, c_puct)
         mcts2 = MCTS(self.nnet2, n_playout, c_puct)
-        score = 0
+        W, D, L = 0,0,0
         cur_nnet_player = 1
         for i in range(n_games):
             print('now nnet1 is',cur_nnet_player)
@@ -47,7 +47,7 @@ class Arena():
             moves_count = 0
             act_list = []
             #game.print_game_state()
-            while game.get_game_result() == 0:
+            while game.get_game_result()[0] == 0:
                 if game.cur_player == cur_nnet_player:
                     if moves_count < 8:
                         acts, act_probs = mcts1.play(game, 1)
@@ -70,14 +70,17 @@ class Arena():
                     moves_count += 1
             game.print_game_state()
             print(f'Game{i+1}: ' + convert(act_list))
-            res = game.get_game_result()
+            res = game.get_game_result()[1]
             if res == game.Draw:
                 res = 0
-            score += res * game.cur_player * cur_nnet_player
-            if res * game.cur_player * cur_nnet_player > 0:
+                D += 1
+            elif res * game.cur_player * cur_nnet_player > 0:
                 print('nnet1 wins!')
+                W += 1
+            else:
+                L += 1
             cur_nnet_player = -cur_nnet_player
-        return score
+        return W, D, L
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -88,5 +91,5 @@ if __name__ == '__main__':
     parser.add_argument('-c',type=int,default=5)
     args = parser.parse_args()
     arena = Arena(args.model1,args.model2)
-    score = arena.run(args.n,args.p,args.c)
-    print('final score =',score)
+    scores = arena.run(args.n,args.p,args.c)
+    print('(W, D, L) =',scores)

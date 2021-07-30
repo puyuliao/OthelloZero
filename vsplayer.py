@@ -49,7 +49,7 @@ if __name__ == '__main__':
     temperature = 0.001
 
     game.print_game_state()
-    while game.get_game_result() == 0:
+    while game.get_game_result()[0] == 0:
         if game.cur_player == cur_nnet_player:
             if moves_count < 8:
                 acts, act_probs = mcts1.play(game, 0.1)
@@ -81,7 +81,7 @@ if __name__ == '__main__':
             game.set_next_state(action)
             moves_count += 1
         game.print_game_state()
-    res = game.get_game_result()
+    res = game.get_game_result()[1]
     if res == game.Draw:
         print('draw')
     elif res * game.cur_player * cur_nnet_player > 0:

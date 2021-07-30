@@ -89,8 +89,8 @@ class MCTS():
             action, node = node.select(self.c_puct)
             game.set_next_state(action)
 
-        result = game.get_game_result()
-        if result == 0:
+        ended, result = game.get_game_result()
+        if ended == 0:
             log_actprob, score = self.nnet(game.get_nnet_format())
             pridiction = np.exp(log_actprob[0].cpu().detach().numpy())
             vailds = game.get_vaild_moves()
@@ -141,7 +141,7 @@ if __name__ == "__main__":
     game = Game(torch.device('cpu'))
     
     game.print_game_state()
-    while game.get_game_result() == 0:
+    while game.get_game_result()[0] == 0:
         if game.cur_player == -1:
             acts, act_probs = mcts.play(game, 1)
             print(acts)
@@ -159,4 +159,4 @@ if __name__ == "__main__":
             mcts.update_with_move(-1)
             game.set_next_state(action)
             game.print_game_state()
-    print('winner: ',game.get_game_result() * game.cur_player)
+    print('winner: ',game.get_game_result()[1] * game.cur_player)

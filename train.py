@@ -40,7 +40,7 @@ class TrainPipeline():
         self.n_playout = 1600
         self.c_puct = 5
 
-        self.buffer_size = 10000
+        self.buffer_size = 100000
         self.data_buffer = deque(maxlen=self.buffer_size)
         
         self.eval_freq = 100
@@ -72,7 +72,7 @@ class TrainPipeline():
         states, mcts_probs, scores = [],[],[]
         moves_count = 0
         game = Game(self.device)
-        while game.get_game_result() == 0:
+        while game.get_game_result()[0] == 0:
             # game.print_game_state()
             # For the first 8 moves of each game, the
             # temperature is set to τ = 1; this selects moves proportionally to their visit count in MCTS, and
@@ -103,7 +103,7 @@ class TrainPipeline():
         #game.print_game_state()
         #game.print_game_state()
         
-        res = game.get_game_result()
+        res = game.get_game_result()[1]
         for i in range(len(scores)):
             if res == game.Draw:
                 scores[i] = game.Draw
@@ -162,7 +162,7 @@ class TrainPipeline():
             game = Game(self.device)
             moves_count = 0
             act_list = []
-            while game.get_game_result() == 0:
+            while game.get_game_result()[0] == 0:
                 if game.cur_player == cur_nnet_player:
                     if moves_count < 8:
                         acts, act_probs = mcts1.play(game, 1)
@@ -184,9 +184,7 @@ class TrainPipeline():
                     game.set_next_state(action)
                     moves_count += 1
             print(f'Game{i+1}: ' + convert(act_list))        
-            res = game.get_game_result()
-            if res == game.Draw:
-                res = 0
+            res = game.get_game_result()[1]
             score += res * game.cur_player * cur_nnet_player
             if res * game.cur_player * cur_nnet_player > 0:
                 print('nnet1 wins!')

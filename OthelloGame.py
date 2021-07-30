@@ -11,7 +11,7 @@ class Game():
     def __init__(self, device):
         self.device = device
         self.set_initial_state()
-        self.Draw = 0.1
+        self.Draw = 0
         self.boardsize = 8
     def set_initial_state(self):
         self.p1piece, self.p2piece = set_initial_board()
@@ -52,18 +52,18 @@ class Game():
         self.p1piece, self.p2piece = self.p2piece, self.p1piece
     
     def get_game_result(self):
-        # return 0 if not ended, 1 if cur_player win, -1 if cur_player loss, 0.1 for draw
+        # return 1 if cur_player win, -1 if cur_player loss, 0 for draw
         if get_possible_move(self.p1piece,self.p2piece) > 0:
-            return 0
+            return 0, 0
         if get_possible_move(self.p2piece,self.p1piece) > 0:
-            return 0
+            return 0, 0
         diff = popcount(self.p1piece) - popcount(self.p2piece)
         if diff > 0: 
-            return 1
+            return 1, 1
         elif diff < 0:
-            return -1
+            return 1, -1
         else:
-            return self.Draw 
+            return 1, self.Draw 
 
     def print_game_state(self):
         print(self.cur_player)
