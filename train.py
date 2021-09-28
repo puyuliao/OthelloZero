@@ -40,7 +40,7 @@ class TrainPipeline():
         self.n_playout = 1600
         self.c_puct = 5
 
-        self.buffer_size = 100000
+        self.buffer_size = 700000
         self.data_buffer = deque(maxlen=self.buffer_size)
         
         self.eval_freq = 100
