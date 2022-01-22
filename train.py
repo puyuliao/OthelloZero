@@ -116,9 +116,9 @@ class TrainPipeline():
         if len(self.data_buffer) < self.batch_size:
             return
         mini_batch = random.sample(self.data_buffer, self.batch_size)
-        state_batch = [data[0] for data in mini_batch]
-        mcts_prob_batch = [data[1] for data in mini_batch]
-        score_batch = [data[2] for data in mini_batch]
+        state_batch = np.array([data[0] for data in mini_batch])
+        mcts_prob_batch =  np.array([data[1] for data in mini_batch])
+        score_batch =  np.array([data[2] for data in mini_batch])
 
         state_batch = Variable(torch.FloatTensor(state_batch)).to(self.device)
         mcts_prob_batch = Variable(torch.FloatTensor(mcts_prob_batch)).to(self.device)
