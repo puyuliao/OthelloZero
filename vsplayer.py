@@ -48,7 +48,7 @@ if __name__ == '__main__':
     moves_count = 0
     temperature = 0.001
 
-    game.print_game_state()
+    game.print_game_state_on_colab()
     while game.get_game_result()[0] == 0:
         if game.cur_player == cur_nnet_player:
             if moves_count < 8:
@@ -80,7 +80,7 @@ if __name__ == '__main__':
                     action = iconvert_single(s)
             game.set_next_state(action)
             moves_count += 1
-        game.print_game_state()
+        game.print_game_state_on_colab()
     res = game.get_game_result()[1]
     if res == game.Draw:
         print('draw')

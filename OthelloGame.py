@@ -1,4 +1,4 @@
-from OthelloLogic import set_initial_board, get_possible_move, resolve_move, popcount, print_board
+from OthelloLogic import set_initial_board, get_possible_move, resolve_move, popcount, print_board, print_board_on_colab
 import numpy as np
 import torch
 
@@ -72,6 +72,16 @@ class Game():
             print(f'{popcount(self.p1piece)} - {popcount(self.p2piece)}')
         else:
             print_board(self.p2piece, self.p1piece)
+            print(f'{popcount(self.p2piece)} - {popcount(self.p1piece)}')
+        print(f'result: {self.get_game_result()}')
+
+    def print_game_state_on_colab(self):
+        print(self.cur_player)
+        if self.cur_player == 1:
+            print_board_on_colab(self.p1piece, self.p2piece)
+            print(f'{popcount(self.p1piece)} - {popcount(self.p2piece)}')
+        else:
+            print_board_on_colab(self.p2piece, self.p1piece)
             print(f'{popcount(self.p2piece)} - {popcount(self.p1piece)}')
         print(f'result: {self.get_game_result()}')
 

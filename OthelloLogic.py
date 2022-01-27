@@ -38,6 +38,36 @@ def set_initial_board():
     oppiece = set_disk(oppiece,4,3)
     return mypiece, oppiece
 
+def print_board_on_colab(mypiece,oppiece):    
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots()
+    for i in range(1,9):
+        for j in range(1,9):
+            ax.add_patch(plt.Rectangle((i, j), 1, 1, edgecolor='black',
+            facecolor='green', linewidth=2))
+
+    for i in range(8):
+        plt.text(i+1.35, 0, chr(65+i))
+
+    for i in range(8):
+        plt.text(0, i+1.35, chr(56-i))
+
+    for i in range(8):
+        for j in range(8):
+            idx = 1 << i*8+j
+            if mypiece & idx:
+                ax.add_patch(plt.Circle((j+1.5, i+1.5), 0.39, edgecolor='black',
+                facecolor='black', linewidth=2))
+            elif oppiece & idx:
+                ax.add_patch(plt.Circle((j+1.5, i+1.5), 0.39, edgecolor='white',
+                facecolor='white', linewidth=2))
+
+    ax.set(xticks=[], yticks=[])
+    ax.axis('image')
+    ax.grid()
+    plt.show()
+
+
 def print_board(mypiece,oppiece):
     print('\ABCDEFGH')
     for i in range(8):
